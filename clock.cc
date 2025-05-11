@@ -26,12 +26,12 @@ void Clock::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int heig
   cr->set_line_width(m_line_width);
 
   cr->save();
-  cr->set_source_rgba(0.337, 0.612, 0.117, 0.9);   // green
+  cr->set_source_rgba(0.294, 0.0, 0.509, 0.9);   // indigo #4b0082
   cr->paint();
   cr->restore();
   cr->arc(0, 0, m_radius, 0, 2 * M_PI);
   cr->save();
-  cr->set_source_rgba(1.0, 1.0, 1.0, 0.8);
+  cr->set_source_rgba(0.2, 0.0, 0.4, 0.8); // deep violet #330066
   cr->fill_preserve();
   cr->restore();
   cr->stroke_preserve();
@@ -85,14 +85,14 @@ void Clock::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int heig
   cr->restore();
 
   // draw the minutes hand
-  cr->set_source_rgba(0.117, 0.337, 0.612, 0.9);   // blue
+  cr->set_source_rgba(0.709, 0.494, 0.862, 0.9);   // lavender #b57edc
   cr->move_to(0, 0);
   cr->line_to(sin(minutes + seconds / 60) * (m_radius * 0.8),
     -cos(minutes + seconds / 60) * (m_radius * 0.8));
   cr->stroke();
 
   // draw the hours hand
-  cr->set_source_rgba(0.337, 0.612, 0.117, 0.9);   // green
+  cr->set_source_rgba(1.0, 0.0, 1.0, 0.9);   // fuschia #ff00ff
   cr->move_to(0, 0);
   cr->line_to(sin(hours + minutes / 12.0) * (m_radius * 0.5),
     -cos(hours + minutes / 12.0) * (m_radius * 0.5));
