@@ -25,10 +25,22 @@ void Clock::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int heig
   cr->translate(0.5, 0.5);
   cr->set_line_width(m_line_width);
 
+  this->draw_background(cr);
+  this->draw_clock_face(cr);
+  this->draw_hands(cr);
+
+}
+
+void Clock::draw_background(const Cairo::RefPtr<Cairo::Context>& cr)
+{
   cr->save();
   cr->set_source_rgba(0.294, 0.0, 0.509, 0.9);   // indigo #4b0082
   cr->paint();
   cr->restore();
+}
+
+void Clock::draw_clock_face(const Cairo::RefPtr<Cairo::Context>& cr)
+{
   cr->arc(0, 0, m_radius, 0, 2 * M_PI);
   cr->save();
   cr->set_source_rgba(0.2, 0.0, 0.4, 0.8); // deep violet #330066
@@ -60,16 +72,19 @@ void Clock::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int heig
     cr->stroke();
     cr->restore(); /* stack-pen-size */
   }
+}
 
+void Clock::draw_hands(const Cairo::RefPtr<Cairo::Context>& cr)
+{
   // store the current time
   time_t rawtime;
   time(&rawtime);
   struct tm * timeinfo = localtime (&rawtime);
 
   // compute the angles of the indicators of our clock
-  double minutes = timeinfo->tm_min * M_PI / 30;
-  double hours = timeinfo->tm_hour * M_PI / 6;
-  double seconds= timeinfo->tm_sec * M_PI / 30;
+  const double minutes = timeinfo->tm_min * M_PI / 30;
+  const double hours = timeinfo->tm_hour * M_PI / 6;
+  const double seconds= timeinfo->tm_sec * M_PI / 30;
 
   cr->save();
   cr->set_line_cap(Cairo::Context::LineCap::ROUND);

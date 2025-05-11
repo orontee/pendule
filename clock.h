@@ -15,4 +15,9 @@ protected:
 
   double m_radius;
   double m_line_width;
+
+private:
+  void draw_background(const Cairo::RefPtr<Cairo::Context>& cr);
+  void draw_clock_face(const Cairo::RefPtr<Cairo::Context>& cr);
+  void draw_hands(const Cairo::RefPtr<Cairo::Context>& cr);
 };
