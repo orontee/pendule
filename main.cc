@@ -15,6 +15,7 @@ ExampleWindow::ExampleWindow()
 {
   set_title("Pendule");
   set_child(m_clock);
+  fullscreen();
 }
 
 int main(int argc, char** argv)
