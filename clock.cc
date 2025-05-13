@@ -34,7 +34,7 @@ void Clock::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int heig
 void Clock::draw_background(const Cairo::RefPtr<Cairo::Context>& cr)
 {
   cr->save();
-  cr->set_source_rgba(0.294, 0.0, 0.509, 0.9);   // indigo #4b0082
+  cr->set_source_rgba(0.2, 0.0, 0.4, 0.8); // deep violet #330066
   cr->paint();
   cr->restore();
 }
@@ -43,7 +43,7 @@ void Clock::draw_clock_face(const Cairo::RefPtr<Cairo::Context>& cr)
 {
   cr->arc(0, 0, m_radius, 0, 2 * M_PI);
   cr->save();
-  cr->set_source_rgba(0.2, 0.0, 0.4, 0.8); // deep violet #330066
+  cr->set_source_rgba(0.294, 0.0, 0.509, 0.9); // indigo #4b0082
   cr->fill_preserve();
   cr->restore();
   cr->stroke_preserve();
