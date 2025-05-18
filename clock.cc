@@ -7,7 +7,7 @@
 #include "clock.h"
 
 Clock::Clock()
-: m_radius(0.42), m_line_width(0.05)
+: m_radius(0.42), m_line_width(0.04)
 {
   Glib::signal_timeout().connect( sigc::mem_fun(*this, &Clock::on_timeout), 1000 );
   set_draw_func(sigc::mem_fun(*this, &Clock::on_draw));
@@ -41,6 +41,7 @@ void Clock::draw_background(const Cairo::RefPtr<Cairo::Context>& cr)
 
 void Clock::draw_clock_face(const Cairo::RefPtr<Cairo::Context>& cr)
 {
+  cr->set_source_rgba(0.709, 0.494, 0.862, 1);   // lavender #b57edc
   cr->arc(0, 0, m_radius, 0, 2 * M_PI);
   cr->save();
   cr->set_source_rgba(0.294, 0.0, 0.509, 0.9); // indigo #4b0082
@@ -100,7 +101,7 @@ void Clock::draw_hands(const Cairo::RefPtr<Cairo::Context>& cr)
   cr->restore();
 
   // draw the minutes hand
-  cr->set_source_rgba(0.709, 0.494, 0.862, 0.9);   // lavender #b57edc
+  cr->set_source_rgba(0.08, 0.466, 0.517, 0.9);   // #157784
   cr->move_to(0, 0);
   cr->line_to(sin(minutes + seconds / 60) * (m_radius * 0.8),
     -cos(minutes + seconds / 60) * (m_radius * 0.8));
