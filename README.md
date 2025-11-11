@@ -10,6 +10,6 @@ documentation](https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/sec-draw
 ```
 $ sudo apt install -y libgtkmm-4.0-dev
 $ cmake --fresh -B build -S .
-$ cmake --build build 
+$ cmake --build build
 $ sudo cmake --build build install
 ```
