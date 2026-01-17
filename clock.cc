@@ -1,7 +1,7 @@
 #include "clock.h"
 
-#include <ctime>
 #include <cmath>
+#include <ctime>
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -11,29 +11,25 @@
 #include <glibmm/main.h>
 
 namespace {
-  std::string get_current_day_number() {
-    std::time_t t = std::time(nullptr);
-    std::tm* now = std::localtime(&t);
-    std::ostringstream oss;
-    oss << std::put_time(now, "%d");
-    return oss.str();
-  }
+std::string get_current_day_number() {
+  std::time_t t = std::time(nullptr);
+  std::tm *now = std::localtime(&t);
+  std::ostringstream oss;
+  oss << std::put_time(now, "%d");
+  return oss.str();
 }
+} // namespace
 
-
-Clock::Clock()
-: radius(0.42), line_width(0.04)
-{
-  Glib::signal_timeout().connect( sigc::mem_fun(*this, &Clock::on_timeout), 1000 );
+Clock::Clock() : radius(0.42), line_width(0.04) {
+  Glib::signal_timeout().connect(sigc::mem_fun(*this, &Clock::on_timeout),
+                                 1000);
   set_draw_func(sigc::mem_fun(*this, &Clock::on_draw));
 }
 
-Clock::~Clock()
-{
-}
+Clock::~Clock() {}
 
-void Clock::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int height)
-{
+void Clock::on_draw(const Cairo::RefPtr<Cairo::Context> &cr, int width,
+                    int height) {
   // scale to unit square and translate (0, 0) to be (0.5, 0.5), i.e.
   // the center of the window
   cr->scale(width, height);
@@ -44,20 +40,17 @@ void Clock::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int heig
   this->draw_clock_face(cr);
   this->draw_date(cr);
   this->draw_hands(cr);
-
 }
 
-void Clock::draw_background(const Cairo::RefPtr<Cairo::Context>& cr)
-{
+void Clock::draw_background(const Cairo::RefPtr<Cairo::Context> &cr) {
   cr->save();
   cr->set_source_rgba(0.2, 0.0, 0.4, 0.8); // deep violet #330066
   cr->paint();
   cr->restore();
 }
 
-void Clock::draw_clock_face(const Cairo::RefPtr<Cairo::Context>& cr)
-{
-  cr->set_source_rgba(0.709, 0.494, 0.862, 1);   // lavender #b57edc
+void Clock::draw_clock_face(const Cairo::RefPtr<Cairo::Context> &cr) {
+  cr->set_source_rgba(0.709, 0.494, 0.862, 1); // lavender #b57edc
   cr->arc(0, 0, this->radius, 0, 2 * M_PI);
   cr->save();
   cr->set_source_rgba(0.294, 0.0, 0.509, 0.9); // indigo #4b0082
@@ -66,35 +59,31 @@ void Clock::draw_clock_face(const Cairo::RefPtr<Cairo::Context>& cr)
   cr->stroke_preserve();
   cr->clip();
 
-  //clock ticks
-  for (int i = 0; i < 12; i++)
-  {
+  // clock ticks
+  for (int i = 0; i < 12; i++) {
     double inset = 0.05;
 
     cr->save();
     cr->set_line_cap(Cairo::Context::LineCap::ROUND);
 
-    if(i % 3 != 0)
-    {
+    if (i % 3 != 0) {
       inset *= 0.8;
       cr->set_line_width(0.03);
     }
 
-    cr->move_to(
-      (this->radius - inset) * cos (i * M_PI / 6),
-      (this->radius - inset) * sin (i * M_PI / 6));
-    cr->line_to (
-      this->radius * cos (i * M_PI / 6),
-      this->radius * sin (i * M_PI / 6));
+    cr->move_to((this->radius - inset) * cos(i * M_PI / 6),
+                (this->radius - inset) * sin(i * M_PI / 6));
+    cr->line_to(this->radius * cos(i * M_PI / 6),
+                this->radius * sin(i * M_PI / 6));
     cr->stroke();
     cr->restore(); /* stack-pen-size */
   }
 }
 
-void Clock::draw_date(const Cairo::RefPtr<Cairo::Context>& cr)
-{
+void Clock::draw_date(const Cairo::RefPtr<Cairo::Context> &cr) {
   cr->save();
-  cr->select_font_face("Sans", Cairo::ToyFontFace::Slant::NORMAL, Cairo::ToyFontFace::Weight::NORMAL);
+  cr->select_font_face("Sans", Cairo::ToyFontFace::Slant::NORMAL,
+                       Cairo::ToyFontFace::Weight::NORMAL);
   cr->set_font_size(0.1);
 
   const auto day_number = get_current_day_number();
@@ -109,17 +98,16 @@ void Clock::draw_date(const Cairo::RefPtr<Cairo::Context>& cr)
   cr->restore();
 }
 
-void Clock::draw_hands(const Cairo::RefPtr<Cairo::Context>& cr)
-{
+void Clock::draw_hands(const Cairo::RefPtr<Cairo::Context> &cr) {
   // store the current time
   time_t rawtime;
   time(&rawtime);
-  struct tm * timeinfo = localtime (&rawtime);
+  struct tm *timeinfo = localtime(&rawtime);
 
   // compute the angles of the indicators of our clock
   const double minutes = timeinfo->tm_min * M_PI / 30;
   const double hours = timeinfo->tm_hour * M_PI / 6;
-  const double seconds= timeinfo->tm_sec * M_PI / 30;
+  const double seconds = timeinfo->tm_sec * M_PI / 30;
 
   cr->save();
   cr->set_line_cap(Cairo::Context::LineCap::ROUND);
@@ -130,22 +118,22 @@ void Clock::draw_hands(const Cairo::RefPtr<Cairo::Context>& cr)
   cr->set_source_rgba(0.7, 0.7, 0.7, 0.8); // gray
   cr->move_to(0, 0);
   cr->line_to(sin(seconds) * (this->radius * 0.9),
-    -cos(seconds) * (this->radius * 0.9));
+              -cos(seconds) * (this->radius * 0.9));
   cr->stroke();
   cr->restore();
 
   // draw the minutes hand
-  cr->set_source_rgba(0.08, 0.466, 0.517, 0.9);   // #157784
+  cr->set_source_rgba(0.08, 0.466, 0.517, 0.9); // #157784
   cr->move_to(0, 0);
   cr->line_to(sin(minutes + seconds / 60) * (this->radius * 0.8),
-    -cos(minutes + seconds / 60) * (this->radius * 0.8));
+              -cos(minutes + seconds / 60) * (this->radius * 0.8));
   cr->stroke();
 
   // draw the hours hand
-  cr->set_source_rgba(1.0, 0.0, 1.0, 0.9);   // fuschia #ff00ff
+  cr->set_source_rgba(1.0, 0.0, 1.0, 0.9); // fuschia #ff00ff
   cr->move_to(0, 0);
   cr->line_to(sin(hours + minutes / 12.0) * (this->radius * 0.5),
-    -cos(hours + minutes / 12.0) * (this->radius * 0.5));
+              -cos(hours + minutes / 12.0) * (this->radius * 0.5));
   cr->stroke();
   cr->restore();
 
@@ -154,8 +142,7 @@ void Clock::draw_hands(const Cairo::RefPtr<Cairo::Context>& cr)
   cr->fill();
 }
 
-bool Clock::on_timeout()
-{
+bool Clock::on_timeout() {
   // force our program to redraw the entire clock.
   queue_draw();
   return true;
