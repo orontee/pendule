@@ -18,6 +18,9 @@ std::string get_current_day_number() {
   oss << std::put_time(now, "%d");
   return oss.str();
 }
+
+static const std::string signature{"Les Meulons"};
+static const std::string city{"TOULOUSE"};
 } // namespace
 
 Clock::Clock() : radius(0.42), line_width(0.04) {
@@ -38,14 +41,35 @@ void Clock::on_draw(const Cairo::RefPtr<Cairo::Context> &cr, int width,
 
   this->draw_background(cr);
   this->draw_clock_face(cr);
+  this->draw_signature(cr);
   this->draw_date(cr);
   this->draw_hands(cr);
 }
-
 void Clock::draw_background(const Cairo::RefPtr<Cairo::Context> &cr) {
   cr->save();
   cr->set_source_rgba(0.2, 0.0, 0.4, 0.8); // deep violet #330066
   cr->paint();
+  cr->restore();
+}
+
+void Clock::draw_signature(const Cairo::RefPtr<Cairo::Context> &cr) {
+  cr->save();
+  cr->select_font_face("Sans", Cairo::ToyFontFace::Slant::NORMAL,
+                       Cairo::ToyFontFace::Weight::NORMAL);
+  cr->set_font_size(0.025);
+
+  Cairo::TextExtents extents;
+  cr->get_text_extents(::signature, extents);
+  double text_height = extents.height;
+  double text_width = extents.width;
+  cr->move_to(-text_width / 2, 2 * radius / 3 + text_height / 2);
+  cr->show_text(::signature);
+
+  cr->get_text_extents(::city, extents);
+  text_width = extents.width;
+  cr->move_to(-text_width / 2, 2 * radius / 3 + 1.75 * text_height);
+  cr->show_text(::city);
+
   cr->restore();
 }
 
