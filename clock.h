@@ -13,8 +13,8 @@ protected:
 
   bool on_timeout();
 
-  double m_radius;
-  double m_line_width;
+  double radius;
+  double line_width;
 
 private:
   void draw_background(const Cairo::RefPtr<Cairo::Context>& cr);
