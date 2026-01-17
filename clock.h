@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cairomm/refptr.h>
 #include <gtkmm/drawingarea.h>
 
 class Clock : public Gtk::DrawingArea
@@ -19,5 +20,6 @@ protected:
 private:
   void draw_background(const Cairo::RefPtr<Cairo::Context>& cr);
   void draw_clock_face(const Cairo::RefPtr<Cairo::Context>& cr);
+  void draw_date(const Cairo::RefPtr<Cairo::Context>& cr);
   void draw_hands(const Cairo::RefPtr<Cairo::Context>& cr);
 };

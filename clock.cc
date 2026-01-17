@@ -2,9 +2,24 @@
 
 #include <ctime>
 #include <cmath>
+#include <iomanip>
+#include <sstream>
+#include <string>
+
 #include <cairomm/context.h>
+#include <cairomm/fontface.h>
 #include <glibmm/main.h>
-#include "clock.h"
+
+namespace {
+  std::string get_current_day_number() {
+    std::time_t t = std::time(nullptr);
+    std::tm* now = std::localtime(&t);
+    std::ostringstream oss;
+    oss << std::put_time(now, "%d");
+    return oss.str();
+  }
+}
+
 
 Clock::Clock()
 : radius(0.42), line_width(0.04)
@@ -27,6 +42,7 @@ void Clock::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int heig
 
   this->draw_background(cr);
   this->draw_clock_face(cr);
+  this->draw_date(cr);
   this->draw_hands(cr);
 
 }
@@ -73,6 +89,24 @@ void Clock::draw_clock_face(const Cairo::RefPtr<Cairo::Context>& cr)
     cr->stroke();
     cr->restore(); /* stack-pen-size */
   }
+}
+
+void Clock::draw_date(const Cairo::RefPtr<Cairo::Context>& cr)
+{
+  cr->save();
+  cr->select_font_face("Sans", Cairo::ToyFontFace::Slant::NORMAL, Cairo::ToyFontFace::Weight::NORMAL);
+  cr->set_font_size(0.1);
+
+  const auto day_number = get_current_day_number();
+
+  Cairo::TextExtents extents;
+  cr->get_text_extents(day_number, extents);
+  const double text_height = extents.height;
+  const double text_width = extents.width;
+
+  cr->move_to(this->radius * 2 / 3 - text_width, text_height / 2);
+  cr->show_text(day_number);
+  cr->restore();
 }
 
 void Clock::draw_hands(const Cairo::RefPtr<Cairo::Context>& cr)
