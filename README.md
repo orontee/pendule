@@ -4,7 +4,8 @@ Simple analog clock build on top of a Raspberry Pi Zero and a
 [Waveshare LCD
 screen](https://www.waveshare.com/wiki/5inch_1080x1080_LCD).
 
-![](./pendule-photo.jpg)
+![](./images/pendule-photo.jpg)
+<img src="https://github.com/orontee/pendule/blob/main/images/pendule-screenshot.png?raw=true" alt="Pendule screenshot" width="300" height="300">
 
 Code started from the excellent [Gtkmm
 documentation](https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/sec-drawing-clock-example.html).
