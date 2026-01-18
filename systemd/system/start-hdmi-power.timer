@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer to power on HDMI display
+
+[Timer]
+OnCalendar=*-*-* 06:30:00
+OnBootSec=0s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

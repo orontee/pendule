@@ -1,0 +1,11 @@
+[Unit]
+Description=Pendule service
+After=hdmi-power.service
+
+[Service]
+ExecStart=/usr/local/bin/start_pendule.sh
+User=matthias
+Environment="XDG_RUNTIME_DIR=/run/user/1000" "HOME=/home/matthias"
+
+[Install]
+WantedBy=default.target

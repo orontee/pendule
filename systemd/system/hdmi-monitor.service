@@ -1,0 +1,10 @@
+[Unit]
+Description=HDMI Monitor Service
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/local/bin/hdmi-monitor.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

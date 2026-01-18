@@ -1,0 +1,11 @@
+[Unit]
+Description=Control HDMI display power
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/hdmi-power.sh on
+ExecStop=/usr/local/bin/hdmi-power.sh off
+RemainAfterExit=on
+
+[Install]
+WantedBy=default.target

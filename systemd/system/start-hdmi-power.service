@@ -1,0 +1,6 @@
+[Unit]
+Description=Start hdmi-power.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl start hdmi-power.service
