@@ -86,20 +86,19 @@ void Clock::draw_clock_face(const Cairo::RefPtr<Cairo::Context> &cr) {
   // clock ticks
   for (int i = 0; i < 12; i++) {
     double inset = 0.05;
+    double dot_radius = (this->line_width + inset / 2) / 3;
 
     cr->save();
-    cr->set_line_cap(Cairo::Context::LineCap::ROUND);
 
     if (i % 3 != 0) {
       inset *= 0.8;
-      cr->set_line_width(0.03);
+      dot_radius = this->line_width / 3;
     }
 
-    cr->move_to((this->radius - inset) * cos(i * M_PI / 6),
-                (this->radius - inset) * sin(i * M_PI / 6));
-    cr->line_to(this->radius * cos(i * M_PI / 6),
-                this->radius * sin(i * M_PI / 6));
-    cr->stroke();
+    cr->arc((this->radius - inset) * cos(i * M_PI / 6),
+            (this->radius - inset) * sin(i * M_PI / 6),
+            dot_radius, 0, 2 * M_PI);
+    cr->fill();
     cr->restore(); /* stack-pen-size */
   }
 }
