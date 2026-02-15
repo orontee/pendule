@@ -13,6 +13,37 @@ namespace websocket = beast::websocket;
 namespace asio = boost::asio;
 using tcp = asio::ip::tcp;
 
+enum PlaybackState {
+  UNKNOWN,
+  PLAYING,
+  PAUSED,
+  STOPPED
+};
+
+struct PlaybackStateChange {
+  PlaybackState new_state;
+
+  std::string track_uri;
+  std::string track_name;
+
+  std::string album_uri;
+  std::string album_name;
+
+  std::string artist_uri;
+  std::string artist_name;
+
+  static PlaybackState from_string(const std::string &str) {
+    if (str == "playing") {
+      return PLAYING;
+    } else if (str == "paused") {
+      return PAUSED;
+    } else if (str == "stopped") {
+      return STOPPED;
+    }
+    return UNKNOWN;
+  }
+};
+
 class MopidyClient {
   public:
   MopidyClient(const std::string &host, const std::string &port) :
@@ -28,19 +59,18 @@ class MopidyClient {
   }
 
 private:
-  std::string host;
-  std::string port;
+  const std::string host;
+  const std::string port;
   std::thread websocket_thread;
 
-  static void run(std::string &host, std::string &port) {
+  static void run(std::string host, std::string port) {
     asio::io_context ioc;
     asio::signal_set signals(ioc, SIGINT, SIGTERM);
     signals.async_wait([&](auto, auto) { ioc.stop(); });
 
-    asio::spawn(ioc, [&](asio::yield_context yield) {
+    auto spawned = asio::spawn(ioc, [&](asio::yield_context yield) {
       websocket_client(host, port, yield);
     });
-
     ioc.run();
   }
 
@@ -51,7 +81,7 @@ private:
     auto const results = resolver.async_resolve(host, port, yield);
     beast::get_lowest_layer(ws).async_connect(results, yield);
 
-    ws.async_handshake(host, "/", yield);
+    ws.async_handshake(host, "/mopidy/ws", yield);
 
     for (;;) {
       beast::flat_buffer buffer;

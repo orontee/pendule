@@ -51,5 +51,3 @@ Wiring requires:
 
 A HaiMa Ds3231 RTC module is used to persist time when the system is
 off.
-
-
