@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+case "$1" in
+    configure)
+	systemctl enable hdmi-monitor.service
+	systemctl start hdmi-monitor.service
+
+	systemctl enable hdmi-power.service
+	systemctl start hdmi-power.service
+
+	systemctl enable pendule.service
+	systemctl start pendule.service
+
+	systemctl enable start-hdmi-power.timer
+	systemctl enable stop-hdmi-power.timer
+	;;
+    *)
+	;;
+esac
+# DEBHELPER
+
+exit 0

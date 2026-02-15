@@ -3,7 +3,7 @@ Description=HDMI Monitor Service
 After=multi-user.target
 
 [Service]
-ExecStart=/usr/local/bin/hdmi-monitor.sh
+ExecStart=/usr/bin/hdmi-monitor.sh
 Restart=always
 
 [Install]
