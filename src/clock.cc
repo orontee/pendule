@@ -167,6 +167,6 @@ void Clock::draw_hands(const Cairo::RefPtr<Cairo::Context> &cr) {
 
 bool Clock::on_timeout() {
   // force our program to redraw the entire clock.
-  queue_draw();
+  this->queue_draw();
   return true;
 }
